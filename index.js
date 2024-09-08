@@ -1,17 +1,34 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
+import applicationRoutes from './routes/applications.js';
+
+dotenv.config();
 const app = express();
 
-// DB Connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
+app.use(cors({
+  origin: 'http://localhost:3000'  // Only allow requests from this origin
+}));
+
+// Middleware
+app.use(express.json());
+app.use(morgan('dev'));
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
-app.get('/', function (req, res) {
-  res.send('Hello World');
-});
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/applications', applicationRoutes);
 
-var server = app.listen(5000, function () {
-  console.log("Server running on port 5000");
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
