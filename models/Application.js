@@ -1,17 +1,18 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const applicationSchema = new mongoose.Schema({
-  personalDetails: {
-    firstName: String,
-    lastName: String,
-    email: String,
-    phone: String
+// Application schema definition
+const ApplicationSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
+  name: String,
   income: Number,
   expenses: Number,
   assets: Number,
   liabilities: Number,
-  createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model('Application', applicationSchema);
+export default mongoose.model('Application', ApplicationSchema);
