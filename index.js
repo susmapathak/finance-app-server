@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000'  // Only allow requests from this origin
+  origin: ['http://localhost:3000', 'https://app.susmapathak.site'] // Only allow requests from this origin
 }));
 
 // Middleware
